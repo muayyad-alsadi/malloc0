@@ -93,3 +93,11 @@ free(ptr1); // <--- free won't be usable at this point
 free(ptr2); // <--- both will be usable here
 ```
 
+# Similar prjects
+
+- [Surma's no-free allocator](https://surma.dev/things/c-to-webassembly/)
+- [wee_alloc](https://github.com/rustwasm/wee_alloc/tree/master/wee_alloc)
+- [nanolibc](https://github.com/PetterS/clang-wasm/blob/master/nanolibc/memory.cpp) or [2](https://github.com/bsletten/wasm_tdg/blob/main/ch05/helloworld/nanolibc/memory.cpp) NOTE: you don't need memcpy and alike, they are now implemented as [opcodes in WASM](https://github.com/WebAssembly/bulk-memory-operations/blob/master/proposals/bulk-memory-operations/Overview.md).
+
+
+
