@@ -93,7 +93,7 @@ free(ptr1); // <--- free won't be usable at this point
 free(ptr2); // <--- both will be usable here
 ```
 
-# Similar prjects
+# Similar Projects
 
 - [Surma's no-free allocator](https://surma.dev/things/c-to-webassembly/)
 - [wee_alloc](https://github.com/rustwasm/wee_alloc/tree/master/wee_alloc)
