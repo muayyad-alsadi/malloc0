@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>malloc example</title>
+</head>
+<body>
+<form onsubmit="return false;">
+Input: <input id="txt" name="txt" onkeyup="ui.changed(this)" onchanged="ui.changed(this)" value="My String"  /><br/>
+<input type="button" onclick="ui.changed(this)" value="Submit" />
+</form>
+<br>
+<div><pre id="out"></pre></div>
+
+</body>
+<script type="text/javascript">
+//<![CDATA[
+const size64kb = 64*1024;
+const utf8enc = new TextEncoder('utf-8');
+const utf8dec = new TextDecoder('utf-8');
+function stringAsBuf(s) {
+  return utf8enc.encode(s);
+}
+function stringFromBuf(buf) {
+  return utf8dec.decode(buf);
+}
+function stringToBuf(s, buf, offset=0) {
+  b=stringAsBuf(s)
+  buf.set(b, offset)
+  return b.length
+}
+// const js_memory = new WebAssembly.Memory({ initial: (500*1024)/size64kb + 1 });
+window.ui = window.ui || {};
+ui.changed=function(event) {
+    let txt = document.getElementById("txt").value;
+    const ret = ui.str_toggle(txt);
+    document.getElementById("out").innerText=ret;
+}
+function log_i(i) {
+  console.log("** log_i: ", i);
+}
+const env={log_i};
+WebAssembly.instantiateStreaming(fetch('str_toggle.wasm'), {env})
+.then(function(results) {
+  var instance = results.instance;
+  console.log(instance);
+  var memory = instance.exports.memory;
+  ui.str_toggle=function(txt) {
+    const txt_buf = stringAsBuf(txt);
+    const txt_len = txt_buf.length;
+    const offset = instance.exports.malloc(txt_len);
+    const buf = new Uint8Array(memory.buffer, offset, txt_len);
+    buf.set(txt_buf);
+    const out_offset = instance.exports.str_toggle(txt_len, offset);
+    const out_buf = new Uint8Array(memory.buffer, out_offset, txt_len);
+    const out = stringFromBuf(out_buf);
+    // the order does not matter
+    instance.exports.free(out_offset);
+    instance.exports.free(offset);
+    return out;
+  };
+});
+
+//]]>
+</script>
+</html>
