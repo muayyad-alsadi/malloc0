@@ -28,7 +28,7 @@ include the two files in your project directory and add the `.c` to your list of
 we have a demo `index.html` that calls `str_toggle.wasm`
 
 ```
-export CFLAGS="-O3 -flto --target=wasm32 -mbulk-memory --no-standard-libraries -Wl,--export-all -Wl,--no-entry -Wl,--lto-O3 -Wl,-z,stack-size=$[4 * 1024]"
+export CFLAGS="-O3 -flto --target=wasm32 -mbulk-memory --no-standard-libraries -Wno-error=int-conversion -Wl,--export-all -Wl,--no-entry -Wl,--lto-O3 -Wl,-z,stack-size=$[4 * 1024]"
 export CFILES="malloc0.c str_toggle.c"
 clang $CFLAGS -o str_toggle.wasm $CFILES
 ```

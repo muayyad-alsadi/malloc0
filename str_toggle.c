@@ -1,4 +1,4 @@
-// clang -O3 -flto --target=wasm32 -mbulk-memory --no-standard-libraries -Wl,--export-all -Wl,--no-entry -Wl,--lto-O3 -Wl,-z,stack-size=$[40 * 1024] -o str_toggle.wasm str_toggle.c malloc0.c
+// clang -O3 -flto --target=wasm32 -mbulk-memory --no-standard-libraries -Wno-error=int-conversion -Wl,--export-all -Wl,--no-entry -Wl,--lto-O3 -Wl,-z,stack-size=$[40 * 1024] -o str_toggle.wasm str_toggle.c malloc0.c
 // wasm-objdump -x str_toggle.wasm 
 #include "malloc0.h"
 
